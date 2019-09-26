@@ -1,0 +1,46 @@
+buildscript {
+    def properties = new Properties()
+    file('build.properties').withInputStream {
+        properties.load(it)
+    }
+    project.ext.config = properties
+
+    repositories {
+        jcenter()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+group = 'de.amino.digihub'
+version = config.project_version
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.apache.httpcomponents', name: 'httpcore', version: config.httpcore_version
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: config.httpclient_version
+    compile group: 'com.google.code.gson', name: 'gson', version: config.gson_version
+
+    compile group: 'org.jetbrains', name: 'annotations', version: config.annotations_version
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: config.junit_version
+}
+
+task generateDocs(type: Exec) {
+    executable 'javadoc'
+    args "-locale en_US ${project.group} -subpackages . -sourcepath ./src/main/java/ -d ./javadoc/ -use -version -author -windowtitle ${project.name}".split(" ")
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+}
