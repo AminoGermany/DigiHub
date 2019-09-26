@@ -1,5 +1,6 @@
 package de.amino.digihub.user;
 
+import de.amino.digihub.util.Base64Utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -39,6 +40,7 @@ public class GUSUser implements IGUSUser {
 	@Override
 	public void setClientToken(@NotNull String clientToken) {
 		token = clientToken;
+		encodedToken = Base64Utils.encode(clientToken);
 	}
 
 	@NotNull
