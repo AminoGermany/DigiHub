@@ -18,10 +18,11 @@ public class HttpUtils {
 	 * @param response The HTTP response.
 	 */
 	public static void validateResponse(@Nullable HttpResponse response) {
-		final StatusLine statusLine = response.getStatusLine();
-		if(statusLine == null) {
+		if(response == null) {
 			return;
 		}
+
+		final StatusLine statusLine = response.getStatusLine();
 		final int code = statusLine.getStatusCode();
 
 		switch(code) {
